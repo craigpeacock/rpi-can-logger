@@ -217,7 +217,7 @@ class QueryingOBDLogger(BaseOBDLogger):
                               arbitration_id=request_arb_id)
 
         ctl_msg = can.Message(arbitration_id=request_arb_id, is_extended_id=0,
-                              data=[0x30, 0x0, 0x0, 0, 0, 0, 0, 0])
+                              data=[0x30, 0x01, 0x0, 0, 0, 0, 0, 0])
 
         buf = bytes()
         num_bytes = 0
@@ -242,7 +242,6 @@ class QueryingOBDLogger(BaseOBDLogger):
                 sequence = recvd.data[0]
                 if sequence == 0x10:
                     self.bus.send(ctl_msg)
-                    self.bus.send(req_msg)
 
                     buf = recvd.data[4:]
                     multiline = True
@@ -254,6 +253,7 @@ class QueryingOBDLogger(BaseOBDLogger):
                     #                 print(len(buf), buf)
                     if len(buf) >= num_bytes:
                         return p['parse'](buf)
+                    self.bus.send(ctl_msg)
                 else:
                     return p['parse'](recvd.data)
                     # print("nothing")
