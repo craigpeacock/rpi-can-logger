@@ -175,7 +175,7 @@ def led2(on_off):
 def get_vin(bus):
     vin_request_message = can.Message(data=[2, 9, 0x02, 0, 0, 0, 0, 0],
                                       arbitration_id=OBD_REQUEST,
-                                      extended_id=0)
+                                      is_extended_id=0)
     bus.send(vin_request_message)
     # keep receiving otherwise timeout
     vin = ""
@@ -187,7 +187,7 @@ def get_vin(bus):
         msg = bus.recv()
         if msg.arbitration_id == OBD_RESPONSE and msg.data[2:4] == bytearray([0x49, 0x02]):
             vin += makeVin(msg.data[-3:])
-            nxtmsg = can.Message(extended_id=0, arbitration_id=0x07e0, data=[0x30, 0, 4, 0, 0, 0, 0, 0])
+            nxtmsg = can.Message(is_extended_id=0, arbitration_id=0x07e0, data=[0x30, 0, 4, 0, 0, 0, 0, 0])
             bus.send(nxtmsg)
         elif msg.arbitration_id == 0x07e8 and msg.data[0] == 0x21:
             vin += makeVin(msg.data[1:])
@@ -303,7 +303,7 @@ bt_commands = {
 
 
 def init_sniff(bus):
-    bus.send(can.Message(extended_id=False, data=[2, 1, 0, 0, 0, 0, 0, 0], arbitration_id=OBD_REQUEST))
+    bus.send(can.Message(is_extended_id=False, data=[2, 1, 0, 0, 0, 0, 0, 0], arbitration_id=OBD_REQUEST))
 
 
 def reset_can_interface(interface):
