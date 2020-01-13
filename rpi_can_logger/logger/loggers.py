@@ -109,7 +109,7 @@ class QueryingOBDLogger(BaseOBDLogger):
         count = 0
         max_wait_sec = 2
         while len(support_check):
-            msg = can.Message(extended_id=0, data=[2, 1, support_check[0], 0, 0, 0, 0, 0], arbitration_id=OBD_REQUEST)
+            msg = can.Message(is_extended_id=0, data=[2, 1, support_check[0], 0, 0, 0, 0, 0], arbitration_id=OBD_REQUEST)
             logging.warning("S> {}".format(msg))
             self.bus.send(msg)
             while 1:
@@ -207,16 +207,16 @@ class QueryingOBDLogger(BaseOBDLogger):
         return can.Message(
             arbitration_id=OBD_REQUEST,
             data=[2, mode, pid, 0, 0, 0, 0, 0],
-            extended_id=False
+            is_extended_id=False
         )
 
     def _log_outlander(self, request_arb_id):
         p = outlander_pids[request_arb_id]
         pid = p['pid']
-        req_msg = can.Message(extended_id=0, data=[2, 0x21, pid, 0, 0, 0, 0, 0],
+        req_msg = can.Message(is_extended_id=0, data=[2, 0x21, pid, 0, 0, 0, 0, 0],
                               arbitration_id=request_arb_id)
 
-        ctl_msg = can.Message(arbitration_id=request_arb_id, extended_id=0,
+        ctl_msg = can.Message(arbitration_id=request_arb_id, is_extended_id=0,
                               data=[0x30, 0x0, 0x0, 0, 0, 0, 0, 0])
 
         buf = bytes()
