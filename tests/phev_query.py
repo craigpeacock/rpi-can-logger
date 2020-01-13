@@ -13,9 +13,9 @@ fst = 1
 print("Querying PHEV on ", channel, interface)
 for request_arb_id, p in cycle([list(outlander_pids.items())[0]]):
     pid = p['pid']
-    req_msg = can.Message(arbitration_id=request_arb_id, extended_id=0,
+    req_msg = can.Message(arbitration_id=request_arb_id, is_extended_id=0,
                           data=[2, 0x21, pid, 0, 0, 0, 0, 0])
-    ctl_msg = can.Message(arbitration_id=request_arb_id, extended_id=0,
+    ctl_msg = can.Message(arbitration_id=request_arb_id, is_extended_id=0,
                           data=[0x30, 0, 0, 0, 0, 0, 0, 0])
 
     print("Requesting:\t",  p['name'])
