@@ -9,13 +9,13 @@ def get_args():
             # PCAN
             interface = 'pcan'
             channel = 'PCAN_USBBUS1'
-        elif arg in ['can1', 'can0']:
+        elif arg in ['can1', 'can0', 'vcan0']:
             # pican
             channel = arg
-            interface = 'socketcan_native'
+            interface = 'socketcan'
         else:
             exit("Invalid CAN bus specified")
     else:
         channel = 'can0'
-        interface = 'socketcan_native'
+        interface = 'socketcan'
     return interface, channel
